@@ -34,6 +34,9 @@ exports.handleGetUsers = async (req, res) => {
     });
   } catch (err) {
     console.log(err);
+    res.json({
+      message: false,
+    });
   }
 };
 exports.handleGetOneUser = async (req, res) => {
@@ -50,6 +53,9 @@ exports.handleGetOneUser = async (req, res) => {
     });
   } catch (err) {
     console.log(err);
+    res.json({
+      message: false,
+    });
   }
 };
 
@@ -67,6 +73,9 @@ exports.handleDeleteUsers = async (req, res) => {
     });
   } catch (err) {
     console.log(err);
+    res.json({
+      message: false,
+    });
   }
 };
 
@@ -83,6 +92,7 @@ exports.handleSetPic = async (req, res) => {
         },
       }
     );
+    console.log(req.body.dataObj);
     let setDataB = await db.collection("updates").insertOne(req.body.dataObj);
     await client.close();
     res.json({
@@ -91,6 +101,9 @@ exports.handleSetPic = async (req, res) => {
     });
   } catch (err) {
     console.log(err);
+    res.json({
+      message: false,
+    });
   }
 };
 exports.handleGetAIpic = async (req, res) => {
@@ -109,6 +122,9 @@ exports.handleGetAIpic = async (req, res) => {
     });
   } catch (err) {
     console.log(err);
+    res.json({
+      message: false,
+    });
   }
 };
 exports.handleDeleteAI = async (req, res) => {
@@ -131,6 +147,9 @@ exports.handleDeleteAI = async (req, res) => {
     });
   } catch (err) {
     console.log(err);
+    res.json({
+      message: false,
+    });
   }
 };
 //foyk zcum ybpa meuq
@@ -140,20 +159,16 @@ exports.handleSend = async (req, res) => {
     ////
     const client = await MongoClient.connect(url);
     const db = client.db("booth");
-    console.log(req.body.dataObj.token, req.params.id);
     let getData = await db
       .collection("updates")
-      .findOne({ token: req.body.dataObj.token });
+      .findOne({ token: req.params.token });
     await client.close();
-    res.json({
-      status: true,
-      msg: "post success",
-    });
 
     ///////
     console.log(getData);
     //nodemailer
     if (getData?.outputPic) {
+      console.log("i am in");
       let transporter = await nodemailer.createTransport({
         service: "gmail",
         host: "smtp@.gmail.com",
@@ -178,17 +193,25 @@ exports.handleSend = async (req, res) => {
           },
         ],
       };
+      console.log("mail start");
       transporter.sendMail(mailOptions, (err, info) => {
         if (err) {
           console.log(err, "err");
         } else {
           console.log("sent");
           console.log(info.response);
+          res.json({
+            status: true,
+            msg: "post success",
+          });
         }
       });
     }
     //nodemailer
   } catch (err) {
     console.log(err);
+    res.json({
+      message: false,
+    });
   }
 };
