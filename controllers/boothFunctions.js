@@ -26,7 +26,6 @@ exports.handleGetUsers = async (req, res) => {
     const client = await MongoClient.connect(url);
     const db = client.db("booth");
     let getData = await db.collection("users").find({}).toArray();
-    console.log(getData);
     await client.close();
     res.json({
       status: true,
@@ -43,7 +42,6 @@ exports.handleGetOneUser = async (req, res) => {
     let getData = await db
       .collection("users")
       .findOne({ _id: new ObjectId(req.params.id) });
-    console.log(getData);
     await client.close();
     res.json({
       status: true,
@@ -73,7 +71,6 @@ exports.handleDeleteUsers = async (req, res) => {
 
 exports.handleSetPic = async (req, res) => {
   try {
-    console.log(req.body);
     const client = await MongoClient.connect(url);
     const db = client.db("booth");
     let setData = await db.collection("users").findOneAndUpdate(
