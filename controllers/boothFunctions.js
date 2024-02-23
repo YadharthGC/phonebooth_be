@@ -189,7 +189,7 @@ exports.handleSend = async (req, res) => {
         attachments: [
           {
             fileName: `${getData.name}`,
-            path: getData.inputPic,
+            path: getData.outputPic,
           },
         ],
       };
